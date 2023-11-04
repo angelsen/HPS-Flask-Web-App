@@ -37,3 +37,6 @@ dist/
 
 # If you have Jupyter notebooks, you might want to ignore checkpoints
 .ipynb_checkpoints/
+
+# Temprary files
+tmp/
