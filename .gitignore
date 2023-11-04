@@ -1,0 +1,39 @@
+# Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Instance folder with local config and data
+instance/
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Development tools
+.vscode/
+
+# Python distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Logs
+*.log
+
+# Database files
+*.db
+*.sql
+
+# If you have Jupyter notebooks, you might want to ignore checkpoints
+.ipynb_checkpoints/
