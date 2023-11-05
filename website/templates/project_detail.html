@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Project Detail{% endblock %}
+
+{% block content %}
+<h1 align="center">{{ project.name }}</h1>
+
+<!-- Add a Duty Cycle Form -->
+<div class="container mt-4 mb-4">
+  <h2>Create a New Duty Cycle</h2>
+  <form method="POST" action="{{ url_for('views.project_detail', project_id=project.id) }}">
+    <div class="form-group">
+      <input type="text" name="duty_cycle_name" placeholder="Duty Cycle Name" required class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Duty Cycle</button>
+  </form>
+</div>
+
+<!-- List Existing Duty Cycles -->
+<div class="container mt-4">
+  <h2>Existing Duty Cycles</h2>
+  <ul class="list-group">
+    {% for duty_cycle in project.duty_cycles %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <a href="{{ url_for('views.edit_duty_cycle', duty_cycle_id=duty_cycle.id) }}">{{ duty_cycle.name }}</a>
+      <form method="POST" action="{{ url_for('views.delete_duty_cycle', duty_cycle_id=duty_cycle.id) }}">
+        <button type="submit" class="btn btn-danger btn-sm">&times;</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

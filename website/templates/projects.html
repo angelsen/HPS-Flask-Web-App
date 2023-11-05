@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<h1 align="center">Projects</h1>
+
+<!-- Project Creation Form -->
+<div class="container mt-4 mb-4">
+  <h2>Create a New Project</h2>
+  <form method="POST" action="{{ url_for('views.create_project') }}">
+    <div class="form-group">
+      <input type="text" name="project_name" placeholder="Project Name" required class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Create Project</button>
+  </form>
+</div>
+
+<!-- List of Projects -->
+<div class="container mt-4">
+  <h2>Existing Projects</h2>
+  <ul class="list-group">
+    {% for project in projects %}
+    <li class="list-group-item">
+      <a href="{{ url_for('views.project_detail', project_id=project.id) }}">{{ project.name }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
