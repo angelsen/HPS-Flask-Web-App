@@ -17,11 +17,17 @@ def create_app():
 
     migrate = Migrate(app, db)
 
-    from .views import views
-    from .auth import auth
+    from .main.views import main as main_blueprint
+    from .auth.views import auth as auth_blueprint
+    from .project.projects.views import projects as projects_blueprint
+    #from .project.project_detail.views import project_detail as project_detail_blueprint
+    #from .project.duty_cycle.views import duty_cycle as duty_cycle_blueprint
 
-    app.register_blueprint(views, url_prefix='/')
-    app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(main_blueprint)
+    app.register_blueprint(auth_blueprint)
+    app.register_blueprint(projects_blueprint, url_prefix='/projects')
+    #app.register_blueprint(project_detail_blueprint, url_prefix='/project')
+    #app.register_blueprint(duty_cycle_blueprint, url_prefix='/duty-cycle')
 
     from .models import User, Note
 

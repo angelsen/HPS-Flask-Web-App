@@ -18,7 +18,8 @@
       <td>{{ load.name }}</td>
       <td>{{ load.value }}</td>
       <td>
-        <form method="POST" action="{{ url_for('views.delete_load', load_id=load.id) }}">
+        <form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.delete_load', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id, load_id=load.id) }}">
+          <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger btn-sm">&times;</button>
         </form>
       </td>
@@ -26,7 +27,7 @@
     {% endfor %}
   </tbody>
 </table>
-<form method="POST" action="{{ url_for('views.duty_cycle', duty_cycle_id=duty_cycle.id) }}">
+<form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.add_load_to_duty_cycle', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id) }}">
   <div class="form-group">
     <input type="text" name="load_name" placeholder="Load Name" required class="form-control">
   </div>

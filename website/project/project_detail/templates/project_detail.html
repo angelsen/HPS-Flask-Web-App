@@ -8,7 +8,7 @@
 <!-- Add a Duty Cycle Form -->
 <div class="container mt-4 mb-4">
   <h2>Create a New Duty Cycle</h2>
-  <form method="POST" action="{{ url_for('views.project_detail', project_id=project.id) }}">
+  <form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.create_duty_cycle', project_id=project.id) }}">
     <div class="form-group">
       <input type="text" name="duty_cycle_name" placeholder="Duty Cycle Name" required class="form-control">
     </div>
@@ -22,8 +22,9 @@
   <ul class="list-group">
     {% for duty_cycle in project.duty_cycles %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-      <a href="{{ url_for('views.edit_duty_cycle', duty_cycle_id=duty_cycle.id) }}">{{ duty_cycle.name }}</a>
-      <form method="POST" action="{{ url_for('views.delete_duty_cycle', duty_cycle_id=duty_cycle.id) }}">
+      <a href="{{ url_for('projects.project_detail.duty_cycle.get_duty_cycle', project_id=project.id, duty_cycle_id=duty_cycle.id) }}">{{ duty_cycle.name }}</a>
+      <form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.delete_duty_cycle', project_id=project.id, duty_cycle_id=duty_cycle.id) }}">
+        <input type="hidden" name="_method" value="DELETE">
         <button type="submit" class="btn btn-danger btn-sm">&times;</button>
       </form>
     </li>

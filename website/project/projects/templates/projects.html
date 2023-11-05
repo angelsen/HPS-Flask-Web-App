@@ -8,7 +8,7 @@
 <!-- Project Creation Form -->
 <div class="container mt-4 mb-4">
   <h2>Create a New Project</h2>
-  <form method="POST" action="{{ url_for('views.create_project') }}">
+  <form method="POST" action="{{ url_for('projects.project_list') }}">
     <div class="form-group">
       <input type="text" name="project_name" placeholder="Project Name" required class="form-control">
     </div>
@@ -22,7 +22,7 @@
   <ul class="list-group">
     {% for project in projects %}
     <li class="list-group-item">
-      <a href="{{ url_for('views.project_detail', project_id=project.id) }}">{{ project.name }}</a>
+      <a href="{{ url_for('projects.project_detail.view_project', project_id=project.id) }}">{{ project.name }}</a>
     </li>
     {% endfor %}
   </ul>
