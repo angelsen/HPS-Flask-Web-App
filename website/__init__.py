@@ -19,7 +19,7 @@ def create_app():
 
     from .main.views import main as main_blueprint
     from .auth.views import auth as auth_blueprint
-    from .project.projects.views import projects as projects_blueprint
+    from .projects.views import projects as projects_blueprint
     #from .project.project_detail.views import project_detail as project_detail_blueprint
     #from .project.duty_cycle.views import duty_cycle as duty_cycle_blueprint
 

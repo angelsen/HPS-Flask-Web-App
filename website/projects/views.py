@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from ...models import Project
-from ... import db
+from .. models import Project
+from .. import db
 
 projects = Blueprint('projects', __name__, template_folder='templates')
 
-from ..project_detail.views import project_detail
+from . project_detail.views import project_detail
 projects.register_blueprint(project_detail, url_prefix='/<int:project_id>')
 
 

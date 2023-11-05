@@ -1,9 +1,4 @@
-{% extends "base.html" %}
-
-{% block title %}Duty Cycle Name{% endblock %}
-
-{% block content %}
-<h1 align="center">Loads</h1>
+<h2 align="center">Operating Loads</h2>
 <table class="table" id="loads">
   <thead>
     <tr>
@@ -18,7 +13,7 @@
       <td>{{ load.name }}</td>
       <td>{{ load.value }}</td>
       <td>
-        <form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.delete_load', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id, load_id=load.id) }}">
+        <form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.operating_load.delete_load', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id, load_id=load.id) }}">
           <input type="hidden" name="_method" value="DELETE">
           <button type="submit" class="btn btn-danger btn-sm">&times;</button>
         </form>
@@ -27,7 +22,7 @@
     {% endfor %}
   </tbody>
 </table>
-<form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.add_load_to_duty_cycle', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id) }}">
+<form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.operating_load.add_load_to_duty_cycle', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id) }}">
   <div class="form-group">
     <input type="text" name="load_name" placeholder="Load Name" required class="form-control">
   </div>
@@ -36,4 +31,3 @@
   </div>
   <button type="submit" class="btn btn-primary">Add Load</button>
 </form>
-{% endblock %}
