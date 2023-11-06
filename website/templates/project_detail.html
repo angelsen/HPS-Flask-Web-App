@@ -2,6 +2,10 @@
 
 {% block title %}Project Detail{% endblock %}
 
+{% block breadcrumbs %}
+{% include 'breadcrumbs.html' %}
+{% endblock %}
+
 {% block content %}
 <h1 align="center">{{ project.name }}</h1>
 

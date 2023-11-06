@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from ..... models import DutyCycle, Load
-from ..... import db
+from .models import DutyCycle, Load
+from . import db
 
 operating_loads_blueprint = Blueprint('operating_load', __name__, template_folder='templates')
 duty_cycle = 'projects.project_detail.duty_cycle'

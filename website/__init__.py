@@ -17,9 +17,9 @@ def create_app():
 
     migrate = Migrate(app, db)
 
-    from .main.views import main as main_blueprint
-    from .auth.views import auth as auth_blueprint
-    from .projects.views import projects as projects_blueprint
+    from .main import main as main_blueprint
+    from .auth import auth as auth_blueprint
+    from .projects import projects as projects_blueprint
     #from .project.project_detail.views import project_detail as project_detail_blueprint
     #from .project.duty_cycle.views import duty_cycle as duty_cycle_blueprint
 

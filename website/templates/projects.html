@@ -2,6 +2,10 @@
 
 {% block title %}Projects{% endblock %}
 
+{% block breadcrumbs %}
+{% include 'breadcrumbs.html' %}
+{% endblock %}
+
 {% block content %}
 <h1 align="center">Projects</h1>
 
@@ -12,10 +16,10 @@
     <div class="form-group">
       <input type="text" name="project_name" placeholder="Project Name" required class="form-control">
     </div>
+    <br />
     <button type="submit" class="btn btn-primary">Create Project</button>
   </form>
 </div>
-
 <!-- List of Projects -->
 <div class="container mt-4">
   <h2>Existing Projects</h2>

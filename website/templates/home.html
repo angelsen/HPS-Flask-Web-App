@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1 align="center">Notes</h1>
+<ul class="list-group list-group-flush"
+    id="notes">
+  {% for note in user.notes %}
+  {% include "partials/_note.html" %}
+  {% endfor %}
+</ul>
+<br />
+<form hx-post="/add-note"
+      hx-on::after-request=" if(event.detail.successful) this.reset()"
+      hx-target="#notes"
+      hx-swap="beforeend">
+  {{ form.hidden_tag() }}
+  {{ form.note(class="form-control") }}
+  <br />
+  <div align="center">
+    <button class="btn btn-primary">Add Note</button>
+  </div>
+</form>
+{% endblock %}

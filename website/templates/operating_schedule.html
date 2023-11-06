@@ -1,0 +1,42 @@
+<h2 align="center">Operating Schedule</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Location</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for schedule in duty_cycle.schedules %}
+      <tr>
+        <td>{{ schedule.start_time.strftime('%H:%M') }}</td>
+        <td>{{ schedule.end_time.strftime('%H:%M') }}</td>
+        <td>{{ schedule.location }}</td>
+        <td>
+          <form method="POST" class="schedule-load-form" action="{{ url_for('projects.project_detail.duty_cycle.operating_schedule.add_loads_to_schedule', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id, schedule_id=schedule.id) }}">
+            <select class="js-example-basic-multiple js-states form-control" name="load_ids[]" multiple="multiple" required>
+              {% for load in loads %}
+                <option value="{{ load.id }}" {% if load.id in schedule.current_load_ids %} selected {% endif %}>
+                  {{ load.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </form>
+        </td>
+        <td>
+        <form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.operating_schedule.delete_schedule', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id, schedule_id=schedule.id) }}">
+          <button type="submit" class="btn btn-danger btn-sm">&times;</button>
+        </form>
+      </td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
+<form method="POST" action="{{ url_for('projects.project_detail.duty_cycle.operating_schedule.add_schedule_to_duty_cycle', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id) }}">
+  <input type="time" name="start_time" required>
+  <input type="time" name="end_time" required>
+  <input type="text" name="location" placeholder="Location" required>
+  <button type="submit" class="btn btn-primary">Add Schedule</button>
+</form>

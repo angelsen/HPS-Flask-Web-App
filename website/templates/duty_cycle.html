@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block styles %}
+{{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet" />
+
+{% endblock %}
+
+{% block javascript %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('.js-example-basic-multiple').select2().on('change', function () {
+      // When an option is selected, submit the form
+      $(this).closest('form').submit();
+    });
+  });
+</script>
+
+{% endblock %}
+
+{% block title %}Duty Cycle Overview{% endblock %}
+
+{% block breadcrumbs %}
+{% include 'breadcrumbs.html' %}
+{% endblock %}
+
+{% block content %}
+<h1 align="center">Duty Cycle Overview</h1>
+
+<!-- Correct the path to where Flask expects the template to be -->
+{% include 'operating_loads.html' %}
+
+{% include 'operating_schedule.html' %}
+
+{% endblock %}
