@@ -37,8 +37,8 @@ class Project(db.Model):
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    start_time = db.Column(db.Time, nullable=False)
-    end_time = db.Column(db.Time, nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)  
     location = db.Column(db.String(150))
     duty_cycle_id = db.Column(db.Integer, db.ForeignKey('duty_cycle.id'))
     loads = db.relationship('Load', secondary='schedule_load', backref='schedules')

@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, flash
 from flask_login import login_required
 from .models import DutyCycle, Schedule, Load
 from . import db
 import datetime
+from dateutil import parser
 
 operating_schedule_blueprint = Blueprint('operating_schedule', __name__)
 
@@ -10,25 +11,22 @@ operating_schedule_blueprint = Blueprint('operating_schedule', __name__)
 @operating_schedule_blueprint.route('/add', methods=['POST'])
 @login_required
 def add_schedule_to_duty_cycle(project_id, duty_cycle_id):
-    start_time = request.form.get('start_time')
-    end_time = request.form.get('end_time')
+    dates = request.form.get('dates')
+    start_time_str, end_time_str = dates.split(' - ')
+    start_time = parser.parse(start_time_str)
+    end_time = parser.parse(end_time_str)
+    
     location = request.form.get('location')
 
-    # Validate input
-    if not start_time or not end_time:
-        flash('Start and end times are required!', category='error')
-    else:
-        # Convert string time to datetime.time object
-        start_time = datetime.datetime.strptime(start_time, '%H:%M').time()
-        end_time = datetime.datetime.strptime(end_time, '%H:%M').time()
+    duty_cycle = DutyCycle.query.get(duty_cycle_id)
 
-        # Create and add new schedule to database
-        new_schedule = Schedule(start_time=start_time, end_time=end_time, location=location, duty_cycle_id=duty_cycle_id)
-        db.session.add(new_schedule)
-        db.session.commit()
-        flash('Schedule added!', category='success')
-
-    return redirect(url_for('projects.project_detail.duty_cycle.get_duty_cycle', project_id=project_id, duty_cycle_id=duty_cycle_id))
+    # Create and add new schedule to database
+    new_schedule = Schedule(start_time=start_time, end_time=end_time, location=location, duty_cycle_id=duty_cycle_id)
+    db.session.add(new_schedule)
+    db.session.commit()
+    
+    # Render the partial _operating_schedule.html with the new schedule
+    return render_template('partials/_operating_schedule.html', schedule=new_schedule, loads=Load.query.all(), duty_cycle=duty_cycle)
 
 # Route to handle deleting a schedule
 @operating_schedule_blueprint.route('/<int:schedule_id>/delete', methods=['POST'])
@@ -36,19 +34,16 @@ def add_schedule_to_duty_cycle(project_id, duty_cycle_id):
 def delete_schedule(project_id, duty_cycle_id, schedule_id):
     schedule = Schedule.query.get_or_404(schedule_id)
     if schedule.duty_cycle_id != duty_cycle_id:
-        flash('Schedule does not belong to the specified duty cycle.', category='error')
+        return jsonify({'error': 'Schedule does not belong to the specified duty cycle.'}), 400
     else:
         db.session.delete(schedule)
         db.session.commit()
-        flash('Schedule deleted!', category='success')
-
-    return redirect(url_for('projects.project_detail.duty_cycle.get_duty_cycle', project_id=project_id, duty_cycle_id=duty_cycle_id))
+        return '', 200  # No content to return
 
 # Route to handle adding multiple loads to a schedule
 @operating_schedule_blueprint.route('/<int:schedule_id>/add_loads', methods=['POST'])
 @login_required
 def add_loads_to_schedule(project_id, duty_cycle_id, schedule_id):
-    print(request.form)
     selected_load_ids = request.form.getlist('load_ids[]')
     schedule = Schedule.query.get(schedule_id)
 
@@ -60,8 +55,8 @@ def add_loads_to_schedule(project_id, duty_cycle_id, schedule_id):
             if load:
                 schedule.loads.append(load)
         db.session.commit()
-        flash('Schedule updated with selected loads!', category='success')
+        # Render the partial _operating_schedule.html with the updated schedule
+        #return render_template('partials/_operating_schedule.html', schedule=schedule, loads=Load.query.all())
+        return '', 204
     else:
-        flash('Invalid schedule!', category='error')
-
-    return redirect(url_for('projects.project_detail.duty_cycle.get_duty_cycle', project_id=project_id, duty_cycle_id=duty_cycle_id))
+        return jsonify({'error': 'Invalid schedule!'}), 400

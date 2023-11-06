@@ -4,6 +4,15 @@
 {{ super() }}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
       rel="stylesheet" />
+<link rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<style>
+  .select2-container {
+    width: 100% !important;
+    /* Set the width of Select2 to full width of its parent */
+  }
+</style>
 
 {% endblock %}
 
@@ -12,15 +21,62 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script> -->
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
 <script>
-  $(document).ready(function () {
-    $('.js-example-basic-multiple').select2().on('change', function () {
-      // When an option is selected, submit the form
-      $(this).closest('form').submit();
+  // Function to initialize Select2 and bind events
+  function initializeSelect2ForElements(elements) {
+    elements.each(function () {
+      var selectElement = $(this);
+
+      // Initialize Select2 if not already initialized
+      if (!selectElement.data('select2')) {
+        selectElement.select2();
+      }
+
+      // Bind events
+      selectElement.off('select2:select select2:unselect').on('select2:select select2:unselect', function (e) {
+        htmx.trigger(this, 'change');
+      });
     });
+  }
+
+  // Document ready initialization
+  $(document).ready(function () {
+    initializeSelect2ForElements($('.js-example-basic-multiple'));
+  });
+
+  // HTMX afterSwap event for re-initializing Select2 on new content
+  document.body.addEventListener('htmx:afterSwap', function (event) {
+    // Check if the swapped content contains any .js-example-basic-multiple elements
+    if (event.detail.target.querySelector('.js-example-basic-multiple')) {
+      initializeSelect2ForElements($('.js-example-basic-multiple'));
+    }
   });
 </script>
 
+<script type="text/javascript">
+  $(function () {
+    $('input[name="dates"]').daterangepicker({
+      "showDropdowns": true,
+      "showISOWeekNumbers": true,
+      "timePicker": true,
+      "timePicker24Hour": true,
+      "timePickerSeconds": true,
+      "startDate": moment().startOf('hour'),
+      "endDate": moment().startOf('hour').add(32, 'hour'),
+      "locale": {
+        "format": "MM/DD/YYYY HH:mm:ss"
+      }
+    }, function (start, end, label) {
+      console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm:ss') + ' to ' + end.format('YYYY-MM-DD HH:mm:ss') + ' (predefined range: ' + label + ')');
+    });
+  });
+</script>
 {% endblock %}
 
 {% block title %}Duty Cycle Overview{% endblock %}

@@ -1,0 +1,33 @@
+<tr>
+    <td>{{ schedule.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+    <td>{{ schedule.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
+    <td>{{ schedule.location }}</td>
+    <td>
+        <select class="js-example-basic-multiple js-states form-control"
+                name="load_ids[]"
+                multiple="multiple"
+                required
+                hx-post="{{ url_for('projects.project_detail.duty_cycle.operating_schedule.add_loads_to_schedule', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id, schedule_id=schedule.id) }}"
+                hx-trigger="change"
+                hx-target="closest tr"
+                hx-swap="outerHTML">
+            {% for load in loads %}
+            <option value="{{ load.id }}"
+                    {% if load.id in schedule.current_load_ids %}
+                    selected
+                    {% endif %}>
+                {{ load.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </td>
+    <td>
+        <button type="button"
+                class="btn btn-danger btn-sm"
+                hx-post="{{ url_for('projects.project_detail.duty_cycle.operating_schedule.delete_schedule', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id, schedule_id=schedule.id) }}"
+                hx-confirm="Are you sure you want to delete this schedule?"
+                hx-trigger="click"
+                hx-target="closest tr"
+                hx-swap="outerHTML">&times;</button>
+    </td>
+</tr>
