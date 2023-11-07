@@ -8,7 +8,6 @@ projects = Blueprint('projects', __name__, template_folder='templates')
 from .project_detail import project_detail
 projects.register_blueprint(project_detail, url_prefix='/<int:project_id>')
 
-
 @projects.route('', methods=['GET', 'POST'])
 @login_required
 def project_list():

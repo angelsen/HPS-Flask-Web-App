@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import JSON
 
 
 class Note(db.Model):
@@ -48,3 +49,9 @@ schedule_load = db.Table('schedule_load',
     db.Column('schedule_id', db.Integer, db.ForeignKey('schedule.id'), primary_key=True),
     db.Column('load_id', db.Integer, db.ForeignKey('load.id'), primary_key=True)
 )
+
+class Location(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), unique=True, nullable=False)
+    description = db.Column(db.String(1000), nullable=True)
+    parameters = db.Column(JSON, nullable=True) 

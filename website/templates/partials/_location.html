@@ -1,0 +1,14 @@
+<tr>
+    <td>{{ location.name }}</td>
+    <td>{{ location.description }}</td>
+    <td><pre>{{ location.parameters | tojson(indent=2) | safe }}</pre></td>
+    <td>
+        <button type="button"
+                class="btn btn-danger btn-sm"
+                hx-post="{{ url_for('location.delete_location', location_id=location.id) }}"
+                hx-confirm="Are you sure you want to delete this location?"
+                hx-trigger="click"
+                hx-target="closest tr"
+                hx-swap="outerHTML">&times;</button>
+    </td>
+</tr>

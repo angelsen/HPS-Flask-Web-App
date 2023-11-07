@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from .models import DutyCycle, Load, Project
+from .models import DutyCycle, Load, Project, Location
 from . import db
 
 duty_cycle_blueprint = Blueprint('duty_cycle', __name__, template_folder='templates')
@@ -43,13 +43,15 @@ def get_duty_cycle(project_id, duty_cycle_id):
     
     project = Project.query.get_or_404(project_id)
 
+    locations = Location.query.all()
+
     breadcrumbs = [
         {'label': 'Home', 'url': url_for('main.home')},
         {'label': 'Projects', 'url': url_for('projects.project_list')},
         {'label': f'{project.name}', 'url': url_for('projects.project_detail.view_project', project_id=project_id)},
         {'label': f'{duty_cycle.name}', 'url': None}
     ]
-    return render_template('duty_cycle.html', user=current_user, duty_cycle=duty_cycle, loads=loads, breadcrumbs=breadcrumbs)
+    return render_template('duty_cycle.html', user=current_user, duty_cycle=duty_cycle, loads=loads, breadcrumbs=breadcrumbs, locations=locations)
 
 # Delete a specific duty cycle
 @duty_cycle_blueprint.route('/<int:duty_cycle_id>', methods=['POST', 'DELETE'])

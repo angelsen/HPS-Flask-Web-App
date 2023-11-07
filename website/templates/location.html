@@ -1,0 +1,48 @@
+<h2>Location Management</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="locations">
+    {% for location in locations %}
+    {% include "partials/_location.html" %}
+    {% endfor %}
+  </tbody>
+  <tbody id="add_location">
+    <tr>
+      <form hx-post="{{ url_for('location.add_location') }}"
+            hx-on="afterRequest-> if(event.detail.successful) this.reset()"
+            hx-target="#locations"
+            hx-swap="beforeend">
+        <td>
+          <input type="text"
+                 name="name"
+                 class="form-control"
+                 placeholder="Name"
+                 required>
+        </td>
+        <td>
+          <input type="text"
+                 name="description"
+                 class="form-control"
+                 placeholder="Description"
+                 required>
+        </td>
+        <td>
+          <textarea name="parameters"
+                    class="form-control"
+                    placeholder='{"key": "value", ...}'
+                    required></textarea>
+        </td>
+        <td>
+          <button type="submit"
+                  class="btn btn-primary btn-block">Add Location</button>
+        </td>
+      </form>
+    </tr>
+  </tbody>
+</table>

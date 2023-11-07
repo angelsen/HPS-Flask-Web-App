@@ -86,9 +86,10 @@
 {% endblock %}
 
 {% block content %}
-<h1 align="center">Duty Cycle Overview</h1>
+<h1>Duty Cycle Overview</h1>
 
-<!-- Correct the path to where Flask expects the template to be -->
+{% include 'location.html' %}
+
 {% include 'operating_loads.html' %}
 
 {% include 'operating_schedule.html' %}
