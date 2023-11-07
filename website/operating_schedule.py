@@ -1,13 +1,12 @@
 from flask import Blueprint, render_template, request, jsonify, flash
 from flask_login import login_required
-from .models import DutyCycle, Schedule, Load
+from .models import DutyCycle, Schedule, Load, Location
 from . import db
 import datetime
 from dateutil import parser
 
 operating_schedule_blueprint = Blueprint('operating_schedule', __name__)
 
-# Route to handle adding a schedule
 @operating_schedule_blueprint.route('/add', methods=['POST'])
 @login_required
 def add_schedule_to_duty_cycle(project_id, duty_cycle_id):
@@ -16,17 +15,20 @@ def add_schedule_to_duty_cycle(project_id, duty_cycle_id):
     start_time = parser.parse(start_time_str)
     end_time = parser.parse(end_time_str)
     
-    location = request.form.get('location')
+    location_id = request.form.get('location_id') 
 
     duty_cycle = DutyCycle.query.get(duty_cycle_id)
+    locations = Location.query.all()
 
-    # Create and add new schedule to database
-    new_schedule = Schedule(start_time=start_time, end_time=end_time, location=location, duty_cycle_id=duty_cycle_id)
+    new_schedule = Schedule(start_time=start_time, end_time=end_time, 
+                            location_id=location_id, duty_cycle_id=duty_cycle_id)
     db.session.add(new_schedule)
     db.session.commit()
     
-    # Render the partial _operating_schedule.html with the new schedule
-    return render_template('partials/_operating_schedule.html', schedule=new_schedule, loads=Load.query.all(), duty_cycle=duty_cycle)
+    # Render the partial with the updated context
+    return render_template('partials/_operating_schedule.html', schedule=new_schedule, 
+                           loads=Load.query.all(), duty_cycle=duty_cycle,
+                           locations=locations)
 
 # Route to handle deleting a schedule
 @operating_schedule_blueprint.route('/<int:schedule_id>/delete', methods=['POST'])
@@ -60,3 +62,16 @@ def add_loads_to_schedule(project_id, duty_cycle_id, schedule_id):
         return '', 204
     else:
         return jsonify({'error': 'Invalid schedule!'}), 400
+    
+@operating_schedule_blueprint.route('/<int:schedule_id>/update_location', methods=['POST'])
+@login_required
+def update_schedule_location(project_id, duty_cycle_id, schedule_id):
+    location_id = request.form.get('location_id')
+    schedule = Schedule.query.get(schedule_id)
+
+    if schedule and location_id:
+        schedule.location_id = location_id
+        db.session.commit()
+        return '', 204  # No content to return
+    else:
+        return jsonify({'error': 'Invalid schedule or location!'}), 400

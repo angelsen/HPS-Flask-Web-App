@@ -27,4 +27,5 @@ def view_project(project_id):
         {'label': 'Projects', 'url': url_for('projects.project_list')},
         {'label': f'{project.name}', 'url': None}  # No URL since it's the current page
     ]
-    return render_template('project_detail.html', user=current_user, project=project, breadcrumbs=breadcrumbs)
+    return render_template('project_detail.html', user=current_user, 
+                           project=project, breadcrumbs=breadcrumbs)

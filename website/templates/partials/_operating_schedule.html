@@ -1,7 +1,25 @@
 <tr>
-    <td>{{ schedule.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
-    <td>{{ schedule.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
-    <td>{{ schedule.location }}</td>
+    <td>{{ schedule.start_time.strftime('%d-%m-%Y %H:%M') }}</td>
+    <td>{{ schedule.end_time.strftime('%d-%m-%Y %H:%M') }}</td>
+    <td>{{ ((schedule.end_time - schedule.start_time).total_seconds() // 60) | int }} minutes</td>   
+    <td>
+        <select class="js-example-basic-single"
+                name="location_id"
+                required
+                hx-post="{{ url_for('projects.project_detail.duty_cycle.operating_schedule.update_schedule_location', project_id=duty_cycle.project_id, duty_cycle_id=duty_cycle.id, schedule_id=schedule.id) }}"
+                hx-trigger="change"
+                hx-target="closest tr"
+                hx-swap="outerHTML">
+            {% for location in locations %}
+            <option value="{{ location.id }}"
+                    {% if location.id == schedule.location_id %}
+                    selected
+                    {% endif %}>
+                {{ location.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </td>
     <td>
         <select class="js-example-basic-multiple js-states form-control"
                 name="load_ids[]"

@@ -38,8 +38,9 @@
         selectElement.select2();
       }
 
-      // Bind events
+      // Bind events to trigger HTMX on change
       selectElement.off('select2:select select2:unselect').on('select2:select select2:unselect', function (e) {
+        // Trigger the 'change' event for HTMX
         htmx.trigger(this, 'change');
       });
     });
@@ -47,14 +48,14 @@
 
   // Document ready initialization
   $(document).ready(function () {
-    initializeSelect2ForElements($('.js-example-basic-multiple'));
+    initializeSelect2ForElements($('.js-example-basic-single, .js-example-basic-multiple'));
   });
 
   // HTMX afterSwap event for re-initializing Select2 on new content
   document.body.addEventListener('htmx:afterSwap', function (event) {
-    // Check if the swapped content contains any .js-example-basic-multiple elements
-    if (event.detail.target.querySelector('.js-example-basic-multiple')) {
-      initializeSelect2ForElements($('.js-example-basic-multiple'));
+    // Check if the swapped content contains any Select2 elements
+    if (event.detail.target.querySelector('.js-example-basic-single, .js-example-basic-multiple')) {
+      initializeSelect2ForElements($('.js-example-basic-single, .js-example-basic-multiple'));
     }
   });
 </script>
@@ -70,10 +71,11 @@
       "startDate": moment().startOf('hour'),
       "endDate": moment().startOf('hour').add(32, 'hour'),
       "locale": {
-        "format": "MM/DD/YYYY HH:mm:ss"
+        "format": "DD/MM/YYYY HH:mm:ss",
+        "firstDay": 1,
       }
     }, function (start, end, label) {
-      console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm:ss') + ' to ' + end.format('YYYY-MM-DD HH:mm:ss') + ' (predefined range: ' + label + ')');
+      console.log('New date range selected: ' + start.format('DD/MM/YYYY HH:mm:ss') + ' to ' + end.format('DD/MM/YYYY HH:mm:ss') + ' (predefined range: ' + label + ')');
     });
   });
 </script>

@@ -40,7 +40,7 @@ class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)  
-    location = db.Column(db.String(150))
+    location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     duty_cycle_id = db.Column(db.Integer, db.ForeignKey('duty_cycle.id'))
     loads = db.relationship('Load', secondary='schedule_load', backref='schedules')
 
@@ -54,4 +54,5 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=False)
     description = db.Column(db.String(1000), nullable=True)
-    parameters = db.Column(JSON, nullable=True) 
+    parameters = db.Column(JSON, nullable=True)
+    schedules = db.relationship('Schedule', backref='location', lazy=True) 
